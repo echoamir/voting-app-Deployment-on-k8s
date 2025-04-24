@@ -1,0 +1,64 @@
+image: 'docker:24.0.5'
+.docker_login: &docker_login |
+  docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+
+stages:
+  - build
+  - deploy
+
+variables:
+  VERSION: v1.0.0
+  
+
+build-vote:
+  image: docker:24
+  stage: build
+  services:
+    - docker:24-dind
+  before_script:
+    - *docker_login
+  variables:
+    TAG_COMMIT: $CI_REGISTRY_IMAGE/vote:${VERSION}
+  script:
+    - docker build -t $TAG_COMMIT -f ./voting-app/vote/Dockerfile ./voting-app/vote
+    - docker push $TAG_COMMIT
+  tags:
+    - maratus
+
+ ###############################
+
+build-result:
+  image: docker:24
+  stage: build
+  services:
+    - docker:24-dind
+  before_script:
+    - *docker_login
+  variables:
+    TAG_COMMIT: $CI_REGISTRY_IMAGE/result:${VERSION}
+  script:
+    - docker build -t $TAG_COMMIT -f ./voting-app/result/Dockerfile ./voting-app/result
+    - docker push $TAG_COMMIT
+  tags:
+    - maratus
+
+####################################
+
+build-worker:
+  image: docker:24
+  stage: build
+  services:
+    - docker:24-dind
+  before_script:
+    - *docker_login
+  variables:
+    TAG_COMMIT: $CI_REGISTRY_IMAGE/worker:${VERSION}
+  script:
+    - docker build -t $TAG_COMMIT -f ./voting-app/worker/Dockerfile ./voting-app/worker
+    - docker push $TAG_COMMIT
+  tags:
+    - maratus
+
+
+
+
