@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+        - name: worker
+          image: {{ .Values.worker.image }}
+          env:
+            - name: REDIS_HOST
+              value: {{ .Values.worker.env.REDIS_HOST }}
+            - name: POSTGRES_HOST
+              value: {{ .Values.worker.env.POSTGRES_HOST }}
+            - name: POSTGRES_USER
+              value: {{ .Values.worker.env.POSTGRES_USER }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.worker.env.POSTGRES_PASSWORD }}
+            - name: POSTGRES_DB
+              value: {{ .Values.worker.env.POSTGRES_DB }}

@@ -1,0 +1,78 @@
+mode: standalone
+
+image:
+  repository: quay.io/minio/minio
+  tag: RELEASE.2025-02-07T23-21-09Z
+  pullPolicy: IfNotPresent
+
+rootUser: "l1DB3pEEeQTwecwewverrwecweccweweVJvp2ZHPl"
+rootPassword: "akPEKIvk7BbsdcswefwevwecHGd7V73XgbjgWSB5hvnKwxyZKJzQU"
+mountPath: "/data"
+
+resources:
+  requests:
+    memory: 1G
+    cpu: 500m
+  limits:
+    memory: 5G
+    cpu: 1000m
+
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  size: 5Gi
+
+environment:
+  MINIO_SERVER_URL: https://object.web.echoamir.ir
+  MINIO_BROWSER_REDIRECT_URL: https://minio.web.echoamir.ir
+
+service:
+  name: minio-api
+  type: ClusterIP
+  port: "9000"
+
+consoleService:
+  name: minio-console
+  type: ClusterIP
+  port: "9001"
+
+
+consoleIngress:
+  enabled: true
+  ingressClassName: nginx
+  annotations: 
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      certmanager.k8s.io/acme-http01-edit-in-place: "true"
+      kubernetes.io/tls-acme: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+  path: /
+  hosts:
+    - minio.web.echoamir.ir
+  tls:
+    - secretName: minio-tls-secret
+      hosts:
+        - minio.web.echoamir.ir
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  annotations: 
+      cert-manager.io/cluster-issuer: "letsencrypt"
+      certmanager.k8s.io/acme-http01-edit-in-place: "true"
+      kubernetes.io/tls-acme: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+
+  path: /
+  hosts:
+    - object.web.echoamir.ir
+  tls:
+    - secretName: object-tls-secret
+      hosts:
+        - object.web.echoamir.ir
+

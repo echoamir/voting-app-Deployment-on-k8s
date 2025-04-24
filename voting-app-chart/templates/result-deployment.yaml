@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: result
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: result
+  template:
+    metadata:
+      labels:
+        app: result
+    spec:
+      containers:
+        - name: result
+          image: {{ .Values.result.image }}
+          command: ["nodemon", "--inspect=0.0.0.0", "server.js"]
+          env:
+            - name: POSTGRES_HOST
+              value: {{ .Values.result.env.POSTGRES_HOST }}
+            - name: POSTGRES_USER
+              value: {{ .Values.result.env.POSTGRES_USER }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.result.env.POSTGRES_PASSWORD }}
+            - name: POSTGRES_DB
+              value: {{ .Values.result.env.POSTGRES_DB }}
+          ports:
+            - containerPort: 80
+

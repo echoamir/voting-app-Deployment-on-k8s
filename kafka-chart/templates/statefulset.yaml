@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kafka
+  labels:
+    app: kafka-app
+spec:
+  serviceName: {{ .Values.service.name }}
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: kafka-app
+  template:
+    metadata:
+      labels:
+        app: kafka-app
+    spec:
+      containers:
+        - name: kafka-container
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 9092
+            - containerPort: 9093
+          env:
+            - name: REPLICAS
+              value: "{{ .Values.replicaCount }}"
+            - name: SERVICE
+              value: "{{ .Values.service.name }}"
+            - name: NAMESPACE
+              value: "{{ .Values.namespace }}"
+            - name: SHARE_DIR
+              value: "{{ .Values.kafka.shareDir }}"
+            - name: CLUSTER_ID
+              value: "{{ .Values.kafka.clusterId }}"
+            - name: DEFAULT_REPLICATION_FACTOR
+              value: "{{ .Values.kafka.replicationFactor }}"
+            - name: DEFAULT_MIN_INSYNC_REPLICAS
+              value: "{{ .Values.kafka.minInSyncReplicas }}"
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.kafka.shareDir }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.storage.size }}

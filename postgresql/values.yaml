@@ -1,0 +1,121 @@
+global:
+  defaultStorageClass: "local-path"
+  storageClass: "local-path"
+  postgresql:
+    username: "postgres"
+    password: "postgres"
+    repmgrUsername: "admin"
+    repmgrPassword: "ZXRYUWF6SUtMeUY5T2xSekhSeUlwaG9MZG1EcDFl"
+    repmgrDatabase: "repmgr"
+  pgpool:
+    adminUsername: "admin"
+    adminPassword: "ZXRYUWF6SUtMeUY5T2xSekhSeUlwaG9MZG1EcDFl"
+    srCheckUser: "postgres"
+    srCheckPassword: "postgres"
+    backendHostnameFormat: "%s-postgresql-ha-postgresql-%d.postgresql-postgresql-ha-postgresql-headless"
+
+namespaceOverride: "psql-ha"
+postgresql: 
+  image:
+    registry: "docker.io"
+    repository: "bitnami/postgresql-repmgr"
+    tag: "17.2.0-debian-12-r8"
+    PullPolicy: "IfNotPresent"
+  repicaCount: 3
+  updateStrategy:
+    type: "RollingUpdate"
+  containerPort: 
+    postgresql: 5432
+  resourcesPerest: "micro"
+
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 10
+
+metric:
+  enabled: true
+
+  image:
+    registry: "docker.io"
+    repository: "bitnami/bitnami-exporter"
+    tag: "0.16.0-debian-12-r6"
+    pullPolicy: "IfNotPresent"
+  resourcesPerest: "nano"
+  countainetPort: 
+    http: 9187
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  startupProbe: 
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 10
+  service:
+    enabled: true
+    annotations: {}
+    type: ClusterIP
+    ports:
+      metric: 9187
+  anotations: 
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9187"
+  serviceMonitor:
+    enabled: true
+    namespace: "monitoring"
+    selector:
+      prometheus: kube-prometheus
+
+persistence:
+  enabled: true
+  storageClass: "local-path"
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
+
+service:
+  type: ClusterIP
+  ports:
+    postgresql: 5432
+  portName: postgresql
+
+backup:
+  enabled: true
+cronjob:
+  schedule: "@daily"
+  timezone: "Asia/Tehran"  
+  failjobHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  restartPolicy: "OnFailure"

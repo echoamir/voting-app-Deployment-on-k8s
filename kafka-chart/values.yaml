@@ -1,0 +1,23 @@
+replicaCount: 3
+service:
+  name: kafka-svc
+  port: 9092
+
+image:
+  repository: doughgle/kafka-kraft
+  tag: latest
+  pullPolicy: IfNotPresent
+
+pdb:
+  minAvailable: 2
+
+storage:
+  size: 1Gi
+
+kafka:
+  clusterId: "oh-sxaDRTcyAr6pFRbXyzA"
+  replicationFactor: 3
+  minInSyncReplicas: 2
+  shareDir: /mnt/kafka
+
+namespace: default

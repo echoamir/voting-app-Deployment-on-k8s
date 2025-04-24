@@ -1,0 +1,23 @@
+vote:
+  image: registry.gitlab.com/echoamir/decisiondeck/vote:v1.0.0
+  domain: vote.web.echoamir.ir
+  env:
+    REDIS_HOST: redis.redis.svc.cluster.local
+
+result:
+  image: registry.gitlab.com/echoamir/decisiondeck/result:v1.0.0
+  domain: result.web.echoamir.ir
+  env:
+    POSTGRES_HOST: postgresql-postgresql-ha-pgpool.psql-ha.svc.cluster.local
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_DB: votes
+
+worker:
+  image: registry.gitlab.com/echoamir/decisiondeck/worker:v1.0.0
+  env:
+    REDIS_HOST: redis.redis.svc.cluster.local
+    POSTGRES_HOST: postgresql-postgresql-ha-pgpool.psql-ha.svc.cluster.local
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_DB: votes
