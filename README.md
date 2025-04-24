@@ -1,5 +1,14 @@
 # Kubernetes Voting App Deployment
 
+![Project Architecture](Untitled-2024-08-20-1841.excalidraw.png)
+
+> *A high-level architecture of the voting application deployed on Kubernetes with CI/CD and observability tools.*
+
+This project demonstrates the deployment of a full-stack voting application on a Kubernetes cluster using modern DevOps tools and best practices.
+
+
+# Kubernetes Voting App Deployment
+
 This project demonstrates the deployment of a full-stack voting application on a Kubernetes cluster using modern DevOps tools and best practices.
 
 ## 🧰 Cluster Provisioning
