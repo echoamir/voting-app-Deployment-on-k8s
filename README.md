@@ -11,15 +11,15 @@ This project demonstrates the deployment of a full-stack voting application on a
 
 This project demonstrates the deployment of a full-stack voting application on a Kubernetes cluster using modern DevOps tools and best practices.
 
-## 🧰 Cluster Provisioning
+##  Cluster Provisioning
 
 The Kubernetes cluster was provisioned using **[Kubespray](https://github.com/kubernetes-sigs/kubespray)**, providing a highly configurable and production-ready environment.
 
-## 🔐 TLS Certificates
+##  TLS Certificates
 
 TLS certificates for services exposed externally are managed via **[cert-manager](https://cert-manager.io/)**, using **Let's Encrypt** as the certificate issuer.
 
-## 📦 Application Architecture
+##  Application Architecture
 
 The deployed application is a **Voting App** that includes the following components:
 
@@ -31,7 +31,7 @@ The deployed application is a **Voting App** that includes the following compone
 
 All services are containerized and deployed via **Helm charts**.
 
-## 🔄 Continuous Integration
+## Continuous Integration
 
 Continuous integration pipelines are defined using **GitLab CI/CD** to automate:
 
@@ -39,7 +39,7 @@ Continuous integration pipelines are defined using **GitLab CI/CD** to automate:
 - Helm chart packaging and deployment
 - Linting and validation of Kubernetes manifests
 
-## 📊 Monitoring & Observability
+##  Monitoring & Observability
 
 Monitoring is handled by:
 
@@ -48,7 +48,7 @@ Monitoring is handled by:
 
 A **federated Prometheus setup** is used to ensure metric persistence and scalability across clusters or environments.
 
-## ⚙️ Highlights
+##  Highlights
 
 - Production-ready Kubernetes setup with Kubespray
 - Secure TLS management using cert-manager and Let's Encrypt
@@ -57,6 +57,5 @@ A **federated Prometheus setup** is used to ensure metric persistence and scalab
 - Scalable monitoring with Prometheus Federation
 - Real-time visualization through Grafana
 
-## 🗂 Repository Structure
 
 
