@@ -17,6 +17,3 @@ metadata:
   namespace: monitoring
 type: Opaque
 
-# User: MeCan
-# Pass:
-# Command: htpasswd -nbm MeCan QsfsfyzwefwsdfwefereLVscTM9WykKergfergergzPqsdsffHD | base64
